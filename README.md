@@ -72,8 +72,23 @@ pytest --cov
 Sample test output:
 
 ```
-# Paste your pytest output here
+============================= test session starts ==============================
+platform darwin -- Python 3.13.13, pytest-9.0.3, pluggy-1.6.0
+rootdir: /Users/brucelyu/Desktop/AI110/ai110-module2show-pawpal-starter
+collected 5 items
+
+tests/test_pawpal.py::test_task_completion PASSED                        [ 20%]
+tests/test_pawpal.py::test_add_task_to_pet PASSED                        [ 40%]
+tests/test_pawpal.py::test_sort_by_time PASSED                           [ 60%]
+tests/test_pawpal.py::test_advance_daily_tasks PASSED                    [ 80%]
+tests/test_pawpal.py::test_detect_conflicts PASSED                       [100%]
+
+============================== 5 passed in 0.02s ===============================
 ```
+
+**Reliability confidence: ★★★★☆ (4/5)**
+
+Core behaviors (task completion, pet/task relationships, chronological sorting, daily recurrence, exact-time conflict detection) are all covered by passing tests. The main gap is that conflict detection only checks for exact `time` matches — duration-based overlap (e.g., a 45-min task at 07:00 running into a task at 07:30) is not yet tested or detected. Expanding to interval-overlap checks would push this to 5/5.
 
 ## 📐 Smarter Scheduling
 
