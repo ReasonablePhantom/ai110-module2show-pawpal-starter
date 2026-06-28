@@ -105,10 +105,10 @@ Core behaviors (task completion, pet/task relationships, chronological sorting, 
 
 Describe your app in numbered steps so a reader can follow along without watching a video:
 
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
+1. Enter your name in the "Owner" text input to personalize your session.
+2. Use the "Add a Pet" form to register your pets (e.g., dog, cat) and add them to your profile.
+3. Use the "Schedule a Task" section to assign activities to specific pets, setting the duration, time (HH:MM), priority, and frequency (once/daily).
+4. View the "Daily Schedule" table to see all tasks automatically sorted chronologically. (If you schedule two tasks at the exact same time for the same pet, a conflict warning will appear at the top).
+5. Click the "✓ Complete" button on a "daily" task to mark it done; the system will automatically generate a fresh, uncompleted task for the next day.
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or link to a demo video here -->

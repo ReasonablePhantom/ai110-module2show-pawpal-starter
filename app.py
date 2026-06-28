@@ -39,13 +39,24 @@ if pets:
     with st.form("add_task_form"):
         selected = st.selectbox("Pet", [p.name for p in pets])
         description = st.text_input("Task description", value="Morning walk")
-        duration = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=20)
-        priority = st.selectbox("Priority", ["low", "medium", "high"], index=2)
+        col1, col2 = st.columns(2)
+        with col1:
+            duration = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=20)
+            time = st.text_input("Time (HH:MM)", value="08:00")
+        with col2:
+            priority = st.selectbox("Priority", ["low", "medium", "high"], index=2)
+            frequency = st.selectbox("Frequency", ["once", "daily"])
         task_submitted = st.form_submit_button("Add Task")
 
     if task_submitted and description.strip():
         pet = next(p for p in pets if p.name == selected)
-        pet.add_task(Task(description=description.strip(), duration=int(duration), priority=priority))
+        pet.add_task(Task(
+            description=description.strip(),
+            duration=int(duration),
+            priority=priority,
+            time=time.strip(),
+            frequency=frequency,
+        ))
         st.success(f"Task added to {selected}!")
 else:
     st.info("Add a pet first before scheduling tasks.")
@@ -54,20 +65,43 @@ st.divider()
 
 # --- Daily Schedule ---
 st.subheader("Daily Schedule")
-all_tasks = st.session_state.owner.get_all_tasks()
+owner = st.session_state.owner
+all_tasks = owner.get_all_tasks()
 
 if all_tasks:
-    scheduler = Scheduler(owner=st.session_state.owner)
-    plan = scheduler.generate_daily_plan()
-    rows = [
-        {
-            "Task": t.description,
-            "Duration (min)": t.duration,
-            "Priority": t.priority,
-            "Done": t.is_completed,
-        }
-        for t in plan
-    ]
-    st.table(rows)
+    scheduler = Scheduler(owner=owner)
+
+    # Conflict warnings
+    for warning in scheduler.detect_conflicts():
+        st.warning(warning)
+
+    # Sorted task table
+    sorted_tasks = scheduler.sort_by_time()
+
+    # Header row
+    h = st.columns([1, 3, 2, 2, 2, 2])
+    h[0].markdown("**Time**")
+    h[1].markdown("**Task**")
+    h[2].markdown("**Pet**")
+    h[3].markdown("**Duration**")
+    h[4].markdown("**Priority**")
+    h[5].markdown("**Status**")
+    st.divider()
+
+    for i, task in enumerate(sorted_tasks):
+        pet_owner = next(p for p in owner.pets if task in p.tasks)
+        cols = st.columns([1, 3, 2, 2, 2, 2])
+        cols[0].write(task.time)
+        cols[1].write(task.description)
+        cols[2].write(pet_owner.name)
+        cols[3].write(f"{task.duration} min")
+        cols[4].write(task.priority)
+        if task.is_completed:
+            cols[5].write("Done ✓")
+        else:
+            if cols[5].button("✓ Complete", key=f"complete_{i}"):
+                task.mark_complete()
+                scheduler.advance_daily_tasks()
+                st.rerun()
 else:
     st.info("No tasks yet — add a pet and some tasks above.")
