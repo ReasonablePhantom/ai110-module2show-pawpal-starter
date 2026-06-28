@@ -81,10 +81,10 @@ Sample test output:
 
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | `Scheduler.sort_by_time()` | Sorts all tasks chronologically by `Task.time` ("HH:MM"); lexicographic sort works because times are zero-padded |
+| Filtering | `Scheduler.filter_by_completion(completed)`, `Scheduler.filter_by_pet(pet_name)` | Filter across all pets by done/undone status, or return one pet's task list by name |
+| Conflict handling | `Scheduler.detect_conflicts()` | Detects exact `time` collisions per pet; returns warning strings instead of raising |
+| Recurring tasks | `Scheduler.advance_daily_tasks()` | Finds completed tasks with `frequency="daily"` and adds a fresh copy (is_completed=False) to the same pet |
 
 ## 📸 Demo Walkthrough
 

@@ -24,8 +24,7 @@
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+The conflict detector checks for exact `time` matches only — it does not calculate whether a task's duration causes it to overlap with the next task (e.g., a 45-minute Vet Checkup at 07:00 would run until 07:45 and overlap with an 07:30 walk, but the scheduler would not flag this). This is a reasonable simplification for a single-owner, low-volume daily planner where the owner is expected to set times thoughtfully, and full interval-overlap detection would require converting "HH:MM" strings to integers and comparing ranges, adding complexity without much benefit at this scale.
 
 ---
 
